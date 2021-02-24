@@ -6,7 +6,6 @@
             //var url = 'https://129.97.134.17:5000;'
             IO.socket = io.connect(url);
             IO.bindEvents();
-
         },
         bindEvents: function(){
             IO.socket.on('connected', IO.onConnected );
@@ -114,7 +113,7 @@
     var drawThickness = 10;
     var color = '#000';
     var ticker;
-    var turnLength_global = 50; //!!!Change
+    var turnLength_global = 10; //!!!Change
     var end_round_wait_time = 10; //!!!Change
     var currentTimer = 0;
     var firstCorrectAnswer = true;
@@ -126,7 +125,8 @@
         FirstAnswer: 5,
         SubsequentAnswer: 2,
         DrawerPoints: 2,
-        FailDrawDeduction: 5
+        FailDrawDeduction: 5,
+        FailDrawDeduction: 10
     };
     var App = {
         gameID:0,
@@ -155,6 +155,7 @@
             App.$doc.on('click','#create_room',App.onCreateClick);
             App.$doc.on('click','#join_room',App.onJoinRoom);
             App.$doc.on('click','#send_message',App.sendMessage);
+            App.$doc.on('click','#skip_round',App.skipRound);
             App.$doc.on('click','#start_game',App.startGame);
             App.$doc.on('click','.palette-color',App.updateDrawColor);
             App.$doc.on('click','.palette-thickness',App.updateDrawThickness);
@@ -167,8 +168,11 @@
             };
             window.onunload = App.onUserLeave;
         },
+
+        
+
         onCreateClick: function(){
-            data={playerName:$('#player_name').val() || 'anon',
+            data={playerName:$('#player_name').val() || 'Anonymous',
                   myPoints: 0,
                   hasAlreadyWon: false,
                   guessedCorrectly: false
@@ -205,7 +209,7 @@
         onJoinRoom: function(){
             //console.log('onjoinroom');
             var data = {gameID: $('#room_id').val(), 
-                        playerName:$('#player_name').val() || 'anon',
+                        playerName:$('#player_name').val() || 'Anonymous',
                         myPoints: 0,
                         hasAlreadyWon: false,
                         guessedCorrectly: false
@@ -277,6 +281,20 @@
             IO.socket.emit('chatMessage',data);
             $('#m').val('');
         },
+
+        skipRound: function() {
+            if(App.gameState == 'playing' && App.gameRole != "drawer"){
+                $("#skip_round").hide();
+            }
+            if(App.gameState == 'playing' && App.gameRole=="drawer"){
+                $("#skip_round").click(function() {
+                    App.players[turn].myPoints -= PointAllocation.FailDrawDeduction;
+                    App.gameEnded();
+                  });
+            }
+        },
+
+
         updateChat: function(data){
             $('#messages').append($('<li class="pure-menu-item">').text(data.playerName+": "+data.message));
             App.$cont[0].scrollTop = App.$cont[0].scrollHeight;
@@ -368,6 +386,7 @@
             if(App.gameRole == "drawer"){
                 //console.log("i am the drawer");
                 //console.log(App.word);
+                $("#info_box").hide();
                 $("#paper").css("cursor","url('http://draw-prototype.herokuapp.com/assets/img/pencil.png') 0 100, pointer");
                 $("#palette_area").html(App.$palette);
                 $("#your_role").html("Oops, you're drawing!");
@@ -380,6 +399,7 @@
 
             }
             if(App.gameRole == "guesser"){
+                $("#info_box").hide();
                 hint = '';
                 for( var i = 0; i < App.word.length; i++){
                     //console.log(App.word[i]);
@@ -493,10 +513,11 @@
 
 
         gameEndedLobby: function(){ //!!!Change
+            $("#current-word").hide(); // Change??? hides on all screens
             $('#main_area').html(App.$end_round_lobby);
 
             if(App.players[turn].playerName == App.myName){
-                $('#next_drawer').html("You are:");
+                $('#next_drawer').html("You are");
             }
             else{
                 $('#next_drawer').html(App.players[turn].playerName + " is ");
@@ -525,6 +546,8 @@
             }
 
         },
+            
+
         startTimer: function(turnLength, start){
             if(App.myRole == 'Host'){
                 if(!start){
@@ -569,6 +592,8 @@
                 App.RevealLetter();
             }          
         },
+
+
         updateUserPoints: function(data){
             App.players[turn].myPoints += PointAllocation.DrawerPoints;
             App.players[turn].hasAlreadyWon = true;

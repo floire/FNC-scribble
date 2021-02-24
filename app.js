@@ -11,12 +11,12 @@ var server = http.createServer(app)
 var io = require('socket.io').listen(server);
 var game = require('./agxgame.js');
 var fs = require('fs');
-var wordList = require('./test.json');
+var wordList = require('./words.json');
 
 
 //temporary word list, mongodb integration in progress
 
-fs.readFile('test.json', 'utf8', function (err, data) {
+fs.readFile('words.json', 'utf8', function (err, data) {
   if (err) throw err;
   wordList = JSON.parse(data);
 });

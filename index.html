@@ -34,12 +34,9 @@
         </div>
     </div>
 
-    <div class ="infoBox">
+    <div id="info_box">
         <span>Do you want to add new words? Drop me a message on slack or <a href = "mailto: kat.szczesna@fnatic.com">send me an email</a>!<br>- Kat</span>
     </div>
-
-
-
 
     <div class="splash-container">
         <div id = "main_area"  class = "splash">
@@ -114,7 +111,7 @@
             <div class = "pure-u-1-4">
             <div class="drawer-step3 guesser-step3">
                 <div>This round is over.</div>
-                <div><span>The correct word was: </span><span id="correct_word_show"></span>.</div>
+                <div><span>The correct word was: </span><span id="correct_word_show"></span><span><br></span></div>
                 <div><span id="correct_count"></span><span>guessed the correct word.</span></div> 
                 <span><b><div id="next_drawer"></div></b></span><span> the next drawer! Get ready! </span>
                 <div><span><br>Time left until next round: </span><span id="timer"></span></div>
@@ -136,6 +133,10 @@
                     </div>
                     <div id='your_role'></div>
                     <div class="guesser-step2" id='drawer_word'></div>
+
+                    <div class="guesser-skip" id='skip_round'>
+                        <button class="pure-button-skip pure-button-primary pure-u-1-1">SKIP ROUND</button>
+                    </div>
         </div>
             <div class = "pure-u-15-24">
                 <div style= "position:fixed;top:0;left:0;" id="cursors"></div>
@@ -158,6 +159,7 @@
         </ul>
     </div>
     <div class="lobby-step2 users_chat">
+
         <div id = "chat" class="pure-menu pure-menu-scrollable custom-restricted chat_box" >
             <ul id="messages" class="pure-menu-list" ></ul>
         </div>

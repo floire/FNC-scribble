@@ -22,15 +22,20 @@ div:nth-child(14) {
     display: hidden !important;
 }
 
-.infoBox {
+#info_box {
     font-size: 1.3vh;
     line-height: 2vh;
     width: 15vw;
     position: absolute;
     bottom: 2vh;
     left: 2vh;
+    color: #000000;
 }
 
+#next_drawer{
+    color: #ff5900;
+    font-weight: 800;
+}
 /*
  * -- BASE STYLES --
  * Most of these are inherited from Base, but I want to change a few.
@@ -111,6 +116,26 @@ h1 {
     border-radius: 4px;
 }
 
+.pure-button-skip{
+    width: 10vw;
+    background-color: #ff5900;
+    color: white;
+    border-radius: 4px;
+    border: 0;
+    padding: 3px;
+    position: absolute;
+    z-index: 999 !important;
+    left: 40px;
+}
+
+.pure-button-test{
+    width: 10vw;
+    background-color: blue;
+    color: white;
+    border-radius: 4px;
+    border: 0;
+    padding: 3px;
+}
 
 /*
  * -- MENU STYLES --
@@ -227,6 +252,7 @@ top:0.5%;
 .main_content{
     height:100%;
 }
+
 /* This is the class used for the main content headers (<h2>) */
 .content-head {
     font-weight: 400;
